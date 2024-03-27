@@ -1,0 +1,44 @@
+name: Build and push Docker image
+
+on:
+  workflow_run:
+    workflows:
+      - "Publish"
+    types:
+      - completed
+      
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages  # 指定分支为 gh-pages
+      
+      - name: Add Dockerfile
+        run: |
+          echo "# 使用官方 Nginx 镜像作为基础镜像" > Dockerfile
+          echo "FROM nginx:latest" >> Dockerfile
+          echo "# 将静态资源复制到 Nginx 默认的 HTML 目录" >> Dockerfile
+          echo "COPY . /usr/share/nginx/html" >> Dockerfile
+          echo "# 暴露 Nginx 默认的 HTTP 端口" >> Dockerfile
+          echo "EXPOSE 80" >> Dockerfile
+          echo "# 在容器启动时自动启动 Nginx 服务" >> Dockerfile
+          echo 'CMD ["nginx", "-g", "daemon off;"]' >> Dockerfile
+        
+      - name: Build Docker image
+        run: |
+          docker build -t code.loveblancs.com/sora/logseq-publish:blog .
+        
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: code.loveblancs.com
+          username: ${{ secrets.Gitea_USERNAME }}
+          password: ${{ secrets.Gitea_PASSWORD }}
+      
+      - name: Push Docker image
+        run: |
+          docker push code.loveblancs.com/sora/logseq-publish:blog
