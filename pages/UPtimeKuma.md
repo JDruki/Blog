@@ -12,7 +12,7 @@ Uptime Kuma是一个开源的网络服务监控工具。它允许用户监视他
   version: '3'
   services:
     uptimekuma:
-      image: louislam/uptime-kuma:1
+      image: louislam/uptime-kuma
       container_name: uptime-kuma
       ports:
         - 3001:3001
