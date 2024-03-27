@@ -420,4 +420,4 @@
  ;;      ;use Percent-encoding for other invalid characters
  :file/name-format :triple-lowbar
  :publishing/all-pages-public? true}
-:default-home {:page "关于我"}
+ :default-home {:page "关于我"}
