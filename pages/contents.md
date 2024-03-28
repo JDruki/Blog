@@ -1,3 +1,3 @@
 - [[Docker]]
 - [[折腾日记]]
--
+- [[Self-hosted]]
